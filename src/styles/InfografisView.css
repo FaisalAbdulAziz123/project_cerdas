@@ -1,0 +1,91 @@
+/* Container Utama */
+.infografis-container {
+    padding: 30px;
+    background-color: #f4f6f9;
+    min-height: 100vh;
+}
+
+/* Header */
+.infografis-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
+}
+
+.infografis-title {
+    color: #0056b3;
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+/* Tombol Kembali */
+.btn-kembali {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    background-color: #6c757d;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.btn-kembali:hover {
+    background-color: #5a6268;
+}
+
+/* Grid Tampilan Infografis */
+.infografis-grid {
+    display: grid;
+    /* Membuat grid responsif: minimal 300px per kolom */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+/* Card Infografis */
+.infografis-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.infografis-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.infografis-img {
+    width: 100%;
+    height: auto;
+    /* Memastikan gambar mengisi lebar card */
+    display: block; 
+}
+
+.card-info {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+    color: #495057;
+    border-top: 1px solid #eee;
+}
+
+/* Notifikasi Tanpa Data */
+.no-data-box {
+    background-color: #ffebee;
+    border: 1px solid #ef9a9a;
+    color: #c62828;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.no-data {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 500;
+}

@@ -1,0 +1,81 @@
+.link-page {
+  background: #f7f9fc; /* lebih lembut daripada putih */
+  min-height: 100vh;
+  padding: 40px 60px;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  color: #333;
+}
+
+/* Header */
+.link-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.link-header h2 {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1a4db0;
+  margin: 0;
+}
+
+.link-header p {
+  font-size: 16px;
+  color: #555;
+  margin-top: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* List */
+.link-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 25px;
+}
+
+/* Card Link */
+.link-card {
+  display: block;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 25px 20px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a4db0;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.link-card:hover {
+  background: #1a4db0;
+  color: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .link-page {
+    padding: 30px 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .link-page {
+    padding: 20px 25px;
+  }
+
+  .link-header h2 {
+    font-size: 28px;
+  }
+
+  .link-header p {
+    font-size: 15px;
+  }
+}

@@ -1,0 +1,125 @@
+.kelola-page {
+  background: #ffffff;
+  min-height: 100vh;
+  padding: 20px 40px;
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+}
+
+/* Header */
+.kelola-header {
+  margin-bottom: 25px;
+}
+
+.kelola-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a4db0;
+  margin: 0;
+}
+
+.kelola-header p {
+  font-size: 14px;
+  color: #666;
+  margin-top: 6px;
+}
+
+/* Table Container */
+.table-container {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  overflow-x: auto;
+}
+
+/* Table */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.data-table thead {
+  background: #1a4db0;
+  color: #fff;
+}
+
+.data-table tbody tr {
+  border-bottom: 1px solid #eee;
+}
+
+.data-table tbody tr:hover {
+  background: #f9f9f9;
+}
+
+/* Status Badge */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.status-badge.aktif {
+  background: #2ecc71;
+}
+
+.status-badge.nonaktif {
+  background: #e74c3c;
+}
+
+/* Buttons */
+.edit-btn,
+.delete-btn {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  margin: 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.edit-btn {
+  background: #4a90e2;
+  color: #fff;
+}
+
+.edit-btn:hover {
+  background: #357abd;
+}
+
+.delete-btn {
+  background: #e63946;
+  color: #fff;
+}
+
+.delete-btn:hover {
+  background: #c53030;
+}
+
+/* Empty State */
+.empty-msg {
+  text-align: center;
+  padding: 20px 0;
+  font-style: italic;
+  color: #888;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .data-table th,
+  .data-table td {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+}

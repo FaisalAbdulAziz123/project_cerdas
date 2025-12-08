@@ -1,0 +1,159 @@
+/* Dashboard Container */
+.dashboard-container {
+  padding: 20px;
+  background-color: #f4f7fa;
+  min-height: 100vh;
+}
+
+/* Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.dashboard-title {
+  color: #2c3e50;
+  font-weight: 700;
+  margin: 0;
+}
+
+.admin-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 8px 15px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  gap: 10px;
+}
+
+/* Layout Konten: Kiri (Kartu) & Kanan (History) */
+.dashboard-content {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start; /* Penting agar tinggi menyesuaikan isi */
+}
+
+/* --- KARTU SELAMAT DATANG (KIRI) --- */
+.dashboard-card {
+  flex: 1; /* Lebar 1 bagian */
+  background: white;
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+}
+
+/* 👇 INI YANG PENTING: BATASI UKURAN GAMBAR 👇 */
+.dashboard-image {
+  width: 100%;
+  max-width: 250px; /* Maksimal lebar gambar 250px */
+  height: auto; /* Tinggi otomatis menyesuaikan */
+  margin-bottom: 20px;
+  object-fit: contain;
+}
+
+.dashboard-text {
+  font-size: 18px;
+  color: #34495e;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.dashboard-text span:first-child {
+  color: #27ae60; /* Aksen hijau */
+}
+
+/* --- HISTORY SECTION (KANAN) --- */
+.history-section {
+  flex: 1.5; /* Lebar lebih besar (1.5 bagian) */
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 500px; /* Tinggi tetap agar scrollable */
+}
+
+.history-header {
+  background-color: #fff;
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.history-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.history-list {
+  padding: 0;
+  overflow-y: auto; /* Scroll jika list panjang */
+  flex: 1;
+}
+
+/* Item History */
+.history-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 15px 20px;
+  border-bottom: 1px solid #f9f9f9;
+  transition: background 0.2s;
+}
+
+.history-item:hover {
+  background-color: #fcfcfc;
+}
+
+.history-icon {
+  margin-right: 15px;
+  font-size: 20px;
+  margin-top: 2px;
+  background: #f4f6f8;
+  padding: 8px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Warna Ikon */
+.icon-create { color: #27ae60; background: #eafaf1; } 
+.icon-update { color: #f39c12; background: #fef5e7; }
+.icon-delete { color: #c0392b; background: #fdedec; }
+.icon-default { color: #7f8c8d; }
+
+.history-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-desc {
+  font-size: 14px;
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.history-time {
+  font-size: 12px;
+  color: #95a5a6;
+}
+
+.no-data {
+  padding: 40px;
+  text-align: center;
+  color: #bdc3c7;
+}
