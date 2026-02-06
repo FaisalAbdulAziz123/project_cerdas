@@ -7,14 +7,37 @@ import { useNavigate } from "react-router-dom";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (email === "admin@gmail.com" && password === "123456") {
-      navigate("/dashboard");
-    } else {
-      alert("Email atau password salah!");
+    setLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Simpan data user ke localStorage
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("Login berhasil!");
+        navigate("/dashboard");
+      } else {
+        alert(data.message || "Login gagal!");
+      }
+    } catch (error) {
+      console.error("Error login:", error);
+      alert("Terjadi kesalahan. Pastikan server backend berjalan.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -53,7 +76,9 @@ export default function Login() {
             </div>
 
             <div className="btn-row">
-              <button type="submit" className="login-btn">Login</button>
+              <button type="submit" className="login-btn" disabled={loading}>
+                {loading ? "Loading..." : "Login"}
+              </button>
             </div>
           </form>
 

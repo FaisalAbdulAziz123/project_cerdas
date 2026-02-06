@@ -3,6 +3,7 @@ import cors from "cors";
 import path from "path";
 
 // Import Routes
+import authRoutes from "./routes/authRoutes.js";
 import temaRoutes from "./routes/temaRoutes.js";
 import kelompokDataRoutes from "./routes/kelompokDataRoutes.js";
 import inputDataRoutes from "./routes/inputDataRoutes.js";
@@ -23,6 +24,7 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use('/uploads', express.static('uploads'));
 
 // 3. Routes
+app.use("/api/auth", authRoutes);
 app.use("/tema", temaRoutes);
 app.use("/kelompok", kelompokDataRoutes);
 app.use("/api", inputDataRoutes); // Prefix /api
