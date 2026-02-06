@@ -1,0 +1,39 @@
+/* Container Utama */
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden; /* Mencegah scroll horizontal */
+}
+
+/* Area Konten Utama */
+.main-content {
+  flex-grow: 1;
+  transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 0; /* Default (saat sidebar tertutup atau di mobile) */
+  width: 100%;
+}
+
+/* Wrapper untuk padding konten */
+.content-wrapper {
+  padding: 0; /* Padding diatur di masing-masing halaman container */
+  min-height: 100vh;
+}
+
+/* --- LOGIKA DESKTOP --- */
+@media (min-width: 1024px) {
+  /* Saat sidebar terbuka di desktop, geser konten ke kanan */
+  .main-content.shifted {
+    margin-left: 270px; /* Sesuai lebar sidebar */
+    width: calc(100% - 270px);
+  }
+}
+
+/* --- LOGIKA MOBILE --- */
+@media (max-width: 1024px) {
+  /* Di mobile, konten TIDAK bergeser walau sidebar buka (karena sidebar overlay/numpuk) */
+  .main-content.shifted {
+    margin-left: 0;
+    width: 100%;
+  }
+}

@@ -5,13 +5,16 @@ import "../styles/SekilasSukabumiView.css";
 export default function SekilasSukabumiView() {
   const navigate = useNavigate();
   const [dataSekilas, setDataSekilas] = useState([]);
+  const [selectedImage, setSelectedImage] = useState(null); // State untuk Modal
+
+  // URL Backend
+  const BASE_URL = "http://localhost:5000";
 
   useEffect(() => {
     const fetchSekilas = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/sekilas");
+        const res = await fetch(`${BASE_URL}/api/sekilas`);
         const data = await res.json();
-
         setDataSekilas(data);
       } catch (err) {
         console.error("Error fetching sekilas:", err);
@@ -21,35 +24,67 @@ export default function SekilasSukabumiView() {
     fetchSekilas();
   }, []);
 
+  // Fungsi tutup modal
+  const closeModal = () => {
+    setSelectedImage(null);
+  };
+
   return (
     <div className="sekilas-container">
+      {/* Header */}
       <div className="sekilas-header">
         <h2>
           SEKILAS <span>KOTA SUKABUMI</span>
         </h2>
         <button className="btn-kembali" onClick={() => navigate(-1)}>
-          Kembali
+          &larr; Kembali
         </button>
       </div>
 
+      {/* Konten Grid */}
       {dataSekilas.length === 0 ? (
-        <p className="no-data">Belum ada data Sekilas Kota Sukabumi.</p>
+        <div className="no-data-box">
+          <p className="no-data">Belum ada data Sekilas Kota Sukabumi.</p>
+        </div>
       ) : (
-        <div className="sekilas-list">
-          {dataSekilas.map((item) => (
-            <div key={item.id} className="sekilas-card">
-              <h3>{item.judulNarasi}</h3>
-              <p>{item.isiNarasi}</p>
+        <div className="sekilas-grid">
+          {dataSekilas.map((item) => {
+            // Logika URL Gambar (Base64 vs Uploads)
+            let imageUrl = null;
+            if (item.gambar) {
+              const isBase64 = item.gambar.startsWith("data:");
+              imageUrl = isBase64 
+                ? item.gambar 
+                : `${BASE_URL}/uploads/${item.gambar}`;
+            }
 
-              {item.gambar && (
-                <img
-                  src={item.gambar}
-                  alt="sekilas"
-                  className="sekilas-image"
-                />
-              )}
-            </div>
-          ))}
+            return (
+              <div key={item.id} className="sekilas-card">
+                <h3>{item.judulNarasi}</h3>
+                <p>{item.isiNarasi}</p>
+
+                {imageUrl && (
+                  <img
+                    src={imageUrl}
+                    alt="sekilas"
+                    className="sekilas-image"
+                    // Klik gambar untuk Zoom
+                    onClick={() => setSelectedImage(imageUrl)}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* --- MODAL POPUP (ZOOM GAMBAR) --- */}
+      {selectedImage && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={closeModal}>&times;</button>
+            <img src={selectedImage} alt="Detail" className="modal-img" />
+          </div>
         </div>
       )}
     </div>

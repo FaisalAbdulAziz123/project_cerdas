@@ -1,7 +1,7 @@
 /* Dashboard Container */
 .dashboard-container {
-  padding: 20px;
-  background-color: #f4f7fa;
+  padding: 30px;
+  background: linear-gradient(135deg, #f5f9fc 0%, #f0f4f8 100%);
   min-height: 100vh;
 }
 
@@ -10,150 +10,401 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
+  margin-bottom: 40px;
 }
 
 .dashboard-title {
-  color: #2c3e50;
-  font-weight: 700;
+  color: #1a3a52;
+  font-weight: 800;
+  font-size: 32px;
   margin: 0;
+  letter-spacing: -0.5px;
 }
 
 .admin-box {
   display: flex;
   align-items: center;
   background: white;
-  padding: 8px 15px;
-  border-radius: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  padding: 10px 18px;
+  border-radius: 25px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   gap: 10px;
 }
 
-/* Layout Konten: Kiri (Kartu) & Kanan (History) */
-.dashboard-content {
-  display: flex;
-  gap: 20px;
-  align-items: flex-start; /* Penting agar tinggi menyesuaikan isi */
+/* Layout Konten: Main Section */
+.dashboard-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 30px;
+  align-items: start;
 }
 
-/* --- KARTU SELAMAT DATANG (KIRI) --- */
+/* --- KARTU SELAMAT DATANG (ATAS) --- */
 .dashboard-card {
-  flex: 1; /* Lebar 1 bagian */
   background: white;
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  padding: 30px 25px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+  min-height: 280px;
+  border: 1px solid rgba(0,0,0,0.03);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 👇 INI YANG PENTING: BATASI UKURAN GAMBAR 👇 */
+.card-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  width: 100%;
+  text-align: left;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
 .dashboard-image {
   width: 100%;
-  max-width: 250px; /* Maksimal lebar gambar 250px */
-  height: auto; /* Tinggi otomatis menyesuaikan */
-  margin-bottom: 20px;
+  max-width: 150px;
+  height: auto;
+  margin-bottom: 0;
   object-fit: contain;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+  flex-shrink: 0;
 }
 
-.dashboard-text {
-  font-size: 18px;
-  color: #34495e;
+.dashboard-welcome-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.dashboard-welcome-title {
+  font-size: 20px;
+  color: #1a3a52;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-welcome-subtitle {
+  font-size: 24px;
+  background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.dashboard-welcome-description {
+  font-size: 15px;
+  color: #5a6c7d;
+  margin-top: 8px;
   font-weight: 600;
   line-height: 1.5;
+  letter-spacing: 0.3px;
 }
 
-.dashboard-text span:first-child {
-  color: #27ae60; /* Aksen hijau */
+/* Professional Card Class */
+.professional-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f9fbfc 100%);
 }
 
-/* --- HISTORY SECTION (KANAN) --- */
+/* --- HISTORY SECTION (BAWAH) --- */
 .history-section {
-  flex: 1.5; /* Lebar lebih besar (1.5 bagian) */
   background: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 500px; /* Tinggi tetap agar scrollable */
+  min-height: 450px;
+  border: 1px solid rgba(0,0,0,0.03);
+}
+
+.professional-history {
+  display: flex;
+  flex-direction: column;
 }
 
 .history-header {
-  background-color: #fff;
-  padding: 20px;
-  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #1a3a52 0%, #2c5282 100%);
+  padding: 25px 30px;
+  border-bottom: none;
 }
 
 .history-header h3 {
   margin: 0;
-  font-size: 18px;
-  color: #2c3e50;
+  font-size: 20px;
+  color: white;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
+  font-weight: 700;
 }
 
 .history-list {
   padding: 0;
-  overflow-y: auto; /* Scroll jika list panjang */
+  overflow-y: auto;
   flex: 1;
+  scrollbar-width: thin;
+  scrollbar-color: #d4d4d8 #f5f5f5;
+}
+
+.history-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.history-list::-webkit-scrollbar-track {
+  background: #f5f5f5;
+}
+
+.history-list::-webkit-scrollbar-thumb {
+  background: #d4d4d8;
+  border-radius: 3px;
+}
+
+.history-list::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
 }
 
 /* Item History */
 .history-item {
   display: flex;
   align-items: flex-start;
-  padding: 15px 20px;
-  border-bottom: 1px solid #f9f9f9;
-  transition: background 0.2s;
+  padding: 20px 30px;
+  border-bottom: 1px solid #f5f5f5;
+  transition: all 0.3s ease;
+  background: #ffffff;
 }
 
 .history-item:hover {
-  background-color: #fcfcfc;
+  background-color: #f9fbfc;
+  border-bottom-color: #e8ecf1;
+}
+
+.professional-history-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .history-icon {
-  margin-right: 15px;
-  font-size: 20px;
-  margin-top: 2px;
-  background: #f4f6f8;
-  padding: 8px;
-  border-radius: 50%;
+  min-width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
+  font-size: 18px;
+  font-weight: 600;
 }
 
-/* Warna Ikon */
-.icon-create { color: #27ae60; background: #eafaf1; } 
-.icon-update { color: #f39c12; background: #fef5e7; }
-.icon-delete { color: #c0392b; background: #fdedec; }
-.icon-default { color: #7f8c8d; }
+/* Warna Ikon dengan better styling */
+.icon-create { 
+  color: #27ae60; 
+  background: #d4edda;
+}
+
+.icon-update { 
+  color: #f39c12; 
+  background: #fff3cd;
+}
+
+.icon-delete { 
+  color: #c0392b; 
+  background: #f8d7da;
+}
+
+.icon-default { 
+  color: #7f8c8d;
+  background: #e8ecf1;
+}
 
 .history-details {
   display: flex;
   flex-direction: column;
+  gap: 4px;
+  flex: 1;
 }
 
 .history-desc {
   font-size: 14px;
   color: #2c3e50;
   font-weight: 600;
-  margin-bottom: 4px;
+  line-height: 1.4;
 }
 
 .history-time {
-  font-size: 12px;
+  font-size: 13px;
   color: #95a5a6;
 }
 
 .no-data {
-  padding: 40px;
+  padding: 60px 30px;
   text-align: center;
   color: #bdc3c7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.no-data p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #7f8c8d;
+}
+
+.no-data small {
+  font-size: 13px;
+  color: #bdc3c7;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .dashboard-main {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .dashboard-card {
+    min-height: 280px;
+  }
+
+  .card-content {
+    gap: 30px;
+  }
+
+  .history-section {
+    min-height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    padding: 20px;
+  }
+
+  .dashboard-header {
+    margin-bottom: 30px;
+  }
+
+  .dashboard-title {
+    font-size: 24px;
+  }
+
+  .dashboard-main {
+    gap: 20px;
+  }
+
+  .dashboard-card {
+    padding: 25px 20px;
+    min-height: auto;
+  }
+
+  .card-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+  }
+
+  .dashboard-image {
+    max-width: 130px;
+  }
+
+  .dashboard-welcome-title {
+    font-size: 18px;
+  }
+
+  .dashboard-welcome-subtitle {
+    font-size: 20px;
+  }
+
+  .dashboard-welcome-description {
+    font-size: 14px;
+  }
+
+  .history-header {
+    padding: 18px 20px;
+  }
+
+  .history-header h3 {
+    font-size: 16px;
+  }
+
+  .history-item,
+  .professional-history-item {
+    padding: 15px 20px;
+  }
+
+  .history-item:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-container {
+    padding: 15px;
+  }
+
+  .dashboard-title {
+    font-size: 20px;
+  }
+
+  .dashboard-card {
+    padding: 20px 15px;
+  }
+
+  .card-content {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .dashboard-image {
+    max-width: 110px;
+  }
+
+  .dashboard-welcome-title {
+    font-size: 16px;
+  }
+
+  .dashboard-welcome-subtitle {
+    font-size: 18px;
+  }
+
+  .dashboard-welcome-description {
+    font-size: 13px;
+  }
+
+  .history-header {
+    padding: 15px;
+  }
+
+  .history-item {
+    padding: 12px 15px;
+  }
+
+  .history-icon {
+    min-width: 38px;
+    height: 38px;
+    font-size: 16px;
+  }
+
+  .history-desc {
+    font-size: 13px;
+  }
+
+  .history-time {
+    font-size: 12px;
+  }
 }

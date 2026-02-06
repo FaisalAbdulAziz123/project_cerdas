@@ -27,7 +27,7 @@ export default function Sidebar({ isOpen }) {
           <img src={logo} alt="Logo Cerdas" className="sidebar-logo" />
           <div className="header-text">
             <h3>CERDAS</h3>
-            <p>Cek Ringkasan Data Statistik Kota Sukabumi</p>
+            <p>Cek Ringkasan Data Statistik</p>
           </div>
         </div>
 

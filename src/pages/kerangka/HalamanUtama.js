@@ -179,8 +179,8 @@ export default function HalamanUtama() {
             <FaPlusCircle className="plus-icon" /> Tambah Kelompok
           </button>
           <div className="admin-profile">
-            <FaExternalLinkAlt className="admin-icon" />
-            <span>Admin</span>
+            {/* <FaExternalLinkAlt className="admin-icon" />
+            <span>Admin</span> */}
           </div>
           <button className="btn-kembali" onClick={() => navigate(-1)}>
             Kembali

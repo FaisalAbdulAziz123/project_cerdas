@@ -7,7 +7,7 @@
 
 /* --- Global Container and Header Styles --- */
 .halaman-utama-container {
-    padding: 20px;
+    padding: 15px;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,16 +15,16 @@
 
 @media (min-width: 768px) {
     .halaman-utama-container {
-        padding: 40px;
+        padding: 25px;
     }
 }
 
 .halaman-utama-header {
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    margin-bottom: 30px;
-    padding: 20px;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 15px;
     background: white;
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -41,14 +41,14 @@
 
 .page-title {
     color: #1a202c;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     letter-spacing: -0.5px;
 }
 
 @media (min-width: 768px) {
     .page-title {
-        font-size: 2rem;
+        font-size: 1.6rem;
     }
 }
 
@@ -59,7 +59,7 @@
     align-items: center;
 }
 
-.admin-profile {
+/* .admin-profile {
     display: flex;
     align-items: center;
     padding: 10px 16px;
@@ -70,7 +70,7 @@
     font-weight: 500;
     box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);
     transition: all 0.3s ease;
-}
+} */
 
 .admin-profile:hover {
     transform: translateY(-2px);
@@ -84,16 +84,16 @@
 
 /* --- Button Styles --- */
 .btn-kembali, .btn-tambah {
-    padding: 10px 20px;
+    padding: 8px 16px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -156,7 +156,7 @@
 }
 
 .data-table thead tr {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
     color: white;
     text-align: left;
     font-weight: 600;
@@ -164,17 +164,17 @@
 }
 
 .data-table th {
-    padding: 16px 20px;
-    font-size: 0.9rem;
+    padding: 12px 15px;
+    font-size: 0.85rem;
     text-transform: uppercase;
     white-space: nowrap;
 }
 
 .data-table td {
-    padding: 14px 20px;
+    padding: 10px 15px;
     border-bottom: 1px solid #e9ecef;
     color: #495057;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .data-table tbody tr {
@@ -287,10 +287,10 @@
 
 .modal-content {
     background: white;
-    padding: 30px;
+    padding: 22px;
     border-radius: 16px;
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
@@ -311,24 +311,24 @@
 
 .modal-content h3 {
     margin-top: 0;
-    margin-bottom: 25px;
+    margin-bottom: 18px;
     color: #1a202c;
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 700;
     border-bottom: 3px solid #667eea;
-    padding-bottom: 12px;
+    padding-bottom: 10px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-weight: 600;
     color: #2d3748;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
 }
 
 .modal-content input[type="text"],
@@ -338,10 +338,10 @@
 .modal-content textarea,
 .modal-content select {
     width: 100%;
-    padding: 12px 15px;
+    padding: 10px 12px;
     border: 2px solid #e2e8f0;
     border-radius: 8px;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
     background-color: #f7fafc;
 }
@@ -357,20 +357,20 @@
 
 .modal-actions {
     display: flex;
-    gap: 12px;
-    margin-top: 25px;
+    gap: 10px;
+    margin-top: 18px;
     flex-wrap: wrap;
 }
 
 .btn-save, .btn-cancel {
     flex: 1;
-    min-width: 120px;
-    padding: 12px 24px;
+    min-width: 110px;
+    padding: 10px 18px;
     border: none;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
