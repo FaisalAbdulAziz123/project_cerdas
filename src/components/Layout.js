@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import "../styles/Layout.css"; // CSS baru untuk layout
 
 export default function Layout() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // State untuk mengontrol sidebar
+  const [isSidebarOpen] = useState(true); // State untuk mengontrol sidebar
 
   return (
     <div className="app-layout">
