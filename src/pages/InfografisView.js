@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios"; // Gunakan axios agar konsisten
+import axios from "axios"; 
 import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/InfografisView.css";
 
@@ -11,10 +11,11 @@ export default function InfografisView() {
   const kelompokAktif = location.state?.kelompokNama || "INFOGRAFIS";
 
   const [dataGambar, setDataGambar] = useState([]);
-  const [selectedImage, setSelectedImage] = useState(null); // State untuk Modal Popup
+  const [selectedImage, setSelectedImage] = useState(null); 
+  const [isLoading, setIsLoading] = useState(true);
 
-  // URL Backend
-  const BASE_URL = "http://localhost:5000";
+  // ✅ URL Backend Online Kamu
+  const BASE_URL = "https://tight-jillian-cerdas-da4a09ea.koyeb.app";
 
   useEffect(() => {
     fetchInfografis();
@@ -22,24 +23,22 @@ export default function InfografisView() {
 
   const fetchInfografis = async () => {
     try {
-      // Ambil semua data
+      setIsLoading(true);
+      // ✅ Ambil data dari server online
       const res = await axios.get(`${BASE_URL}/infografis`);
       
-      // Filter data sesuai kelompok yang dipilih (jika perlu)
-      // Jika ingin menampilkan SEMUA gambar di menu ini, hapus filter-nya.
-      // Di sini saya asumsikan kita menampilkan semua yang ada di tabel infografis.
-      const filtered = res.data; 
+      // Filter data sesuai kelompok yang dipilih
+      // Jika ingin filter berdasarkan kelompok aktif, gunakan baris di bawah ini:
+      const filtered = res.data.filter(item => item.kelompok === kelompokAktif);
       
-      // Kalo mau filter spesifik: 
-      // const filtered = res.data.filter(item => item.kelompok === kelompokAktif);
-
       setDataGambar(filtered);
     } catch (error) {
       console.error("Error fetching infografis:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Fungsi menutup modal
   const closeModal = () => {
     setSelectedImage(null);
   };
@@ -49,7 +48,7 @@ export default function InfografisView() {
       {/* --- HEADER --- */}
       <div className="infografis-header">
         <h2 className="infografis-title">
-          Galeri Infografis
+          Galeri {kelompokAktif}
         </h2>
         <button className="btn-kembali" onClick={() => navigate(-1)}>
           &larr; Kembali
@@ -57,35 +56,45 @@ export default function InfografisView() {
       </div>
 
       {/* --- KONTEN GRID --- */}
-      {dataGambar.length === 0 ? (
+      {isLoading ? (
+        <div className="no-data-box">
+          <p>Memuat galeri dari server...</p>
+        </div>
+      ) : dataGambar.length === 0 ? (
         <div className="no-data-box">
           <p className="no-data">
-            😔 Belum ada gambar infografis yang tersedia.
+            😔 Belum ada gambar untuk kelompok <strong>{kelompokAktif}</strong>.
           </p>
         </div>
       ) : (
         <div className="infografis-grid">
           {dataGambar.map((item) => {
-            // Cek apakah gambar base64 atau nama file
-            const isBase64 = item.gambar.startsWith("data:");
-            const imageUrl = isBase64 
-                ? item.gambar 
-                : `${BASE_URL}/uploads/${item.gambar}`;
+            // Logika pengecekan URL Gambar
+            const isBase64 = item.gambar && item.gambar.startsWith("data:");
+            const isFullUrl = item.gambar && item.gambar.startsWith("http");
+            
+            let imageUrl = "";
+            if (isBase64 || isFullUrl) {
+              imageUrl = item.gambar;
+            } else {
+              // Jika hanya nama file, arahkan ke folder uploads di server Koyeb
+              imageUrl = `${BASE_URL}/uploads/${item.gambar}`;
+            }
 
             return (
               <div 
                 className="infografis-card" 
                 key={item.id}
-                onClick={() => setSelectedImage(imageUrl)} // Klik untuk Zoom
+                onClick={() => setSelectedImage(imageUrl)}
               >
                 <img
                   src={imageUrl}
                   alt={item.kelompok}
                   className="infografis-img"
-                  onError={(e) => { e.target.src = "https://via.placeholder.com/300?text=Error+Img"; }}
+                  onError={(e) => { e.target.src = "https://via.placeholder.com/300?text=Gambar+Tidak+Ditemukan"; }}
                 />
                 <div className="card-info">
-                    {item.kelompok || "Tanpa Judul"}
+                    {item.judul || item.kelompok || "Tanpa Judul"}
                 </div>
               </div>
             );

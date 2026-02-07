@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../../src/styles/CoverHalamanUtama.css";
+// ✅ Pastikan folder styles ada di dalam src/
+import "../styles/CoverHalamanUtama.css"; 
 
 export default function CoverHalamanUtama() {
-  const [image, setImage] = useState(null); // File yang akan diupload
-  const [preview, setPreview] = useState(""); // URL preview gambar
+  const [image, setImage] = useState(null);
+  const [base64Image, setBase64Image] = useState("");
+  const [preview, setPreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  // Ganti dengan URL Backend Anda
-  const BASE_URL = "http://localhost:5000"; 
+  const BASE_URL = "https://tight-jillian-cerdas-da4a09ea.koyeb.app"; 
 
-  // 1. Ambil Background Saat Ini ketika halaman dibuka
   useEffect(() => {
     getBackground();
   }, []);
@@ -19,50 +19,72 @@ export default function CoverHalamanUtama() {
   const getBackground = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/background`);
-      // Jika ada gambar, set preview-nya
       if (response.data && response.data.gambar) {
-        setPreview(`${BASE_URL}/uploads/${response.data.gambar}`);
+        const imgPath = response.data.gambar.startsWith("data:") 
+          ? response.data.gambar 
+          : `${BASE_URL}/uploads/${response.data.gambar}`;
+        setPreview(imgPath);
       }
     } catch (error) {
       console.error("Gagal mengambil background:", error);
     }
   };
 
-  // 2. Handle saat file dipilih
+  // ✅ FUNGSI KOMPRESI EKSTRA: Memaksa gambar menjadi kecil
+  const resizeAndConvert = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        // Gunakan resolusi 1080p (maksimum)
+        const MAX_WIDTH = 1080; 
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = MAX_WIDTH;
+        canvas.height = img.height * scaleSize;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        // Kualitas diturunkan ke 0.5 (50%) agar file sangat ringan (pasti masuk database)
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.5);
+        setBase64Image(dataUrl);
+        setPreview(dataUrl);
+      };
+    };
+  };
+
   const onFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(file);
-      // Buat preview lokal sebelum upload
-      setPreview(URL.createObjectURL(file));
+      resizeAndConvert(file);
     }
   };
 
-  // 3. Handle Upload ke Server
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!image) {
-      setMsg("Pilih gambar terlebih dahulu!");
+    if (!base64Image) {
+      setMsg("❌ Pilih gambar baru terlebih dahulu!");
       return;
     }
 
-    const formData = new FormData();
-    // 'gambar' harus sesuai dengan key di backend (multer)
-    formData.append("gambar", image); 
-
     setLoading(true);
+    setMsg("");
+
     try {
-      // Endpoint ini harus menangani upload file (Multer) & Update DB
-      await axios.put(`${BASE_URL}/api/background`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      // ✅ Kirim Base64 ke server online
+      await axios.put(`${BASE_URL}/api/background`, {
+        gambar: base64Image
       });
-      setMsg("✅ Background berhasil diperbarui!");
-      setLoading(false);
+      setMsg("✅ Berhasil! Gambar tersimpan di database.");
     } catch (error) {
       console.error(error);
-      setMsg("❌ Gagal upload gambar.");
+      // Jika masih gagal, berarti backend belum di-update limit-nya (Langkah 1)
+      setMsg("❌ Gagal. Update 'limit: 50mb' di server.js backend kamu!");
+    } finally {
       setLoading(false);
     }
   };
@@ -71,16 +93,14 @@ export default function CoverHalamanUtama() {
     <div className="cover-page">
       <div className="cover-header">
         <h2>Cover Halaman Utama</h2>
-        <p>Atur gambar background untuk tampilan awal aplikasi mobile.</p>
+        <p>Kelola background aplikasi yang tersimpan aman di database cloud.</p>
       </div>
 
       <div className="cover-content">
         <div className="upload-card">
-          <h3>Preview Background Mobile</h3>
-          
           <div className="image-preview-box">
             {preview ? (
-              <img src={preview} alt="Background Mobile" className="bg-preview" />
+              <img src={preview} alt="Preview" className="bg-preview" />
             ) : (
               <div className="placeholder-text">Belum ada gambar</div>
             )}
@@ -88,37 +108,17 @@ export default function CoverHalamanUtama() {
 
           <form onSubmit={handleUpload} className="upload-form">
             <div className="file-input-wrapper">
-              <label htmlFor="file-upload" className="custom-file-upload">
-                <i className="fas fa-cloud-upload-alt"></i> Pilih Gambar Baru
-              </label>
-              <input 
-                id="file-upload" 
-                type="file" 
-                accept="image/*" 
-                onChange={onFileChange} 
-              />
-              <span className="file-name">
-                {image ? image.name : "Tidak ada file dipilih"}
-              </span>
+              <label htmlFor="file-upload" className="custom-file-upload">Pilih Gambar</label>
+              <input id="file-upload" type="file" accept="image/*" onChange={onFileChange} />
+              <span className="file-name">{image ? image.name : "Tidak ada file"}</span>
             </div>
 
-            {msg && <p className="message">{msg}</p>}
+            {msg && <p className={`message ${msg.includes("✅") ? "success" : "error"}`}>{msg}</p>}
 
             <button type="submit" className="btn-save" disabled={loading}>
               {loading ? "Menyimpan..." : "Simpan Perubahan"}
             </button>
           </form>
-        </div>
-
-        {/* Informasi Tambahan */}
-        <div className="info-card">
-          <h3>Ketentuan Gambar</h3>
-          <ul>
-            <li>Format: <strong>JPG, PNG</strong></li>
-            <li>Orientasi: <strong>Landscape (Mendatar)</strong></li>
-            <li>Ukuran Maksimal: <strong>5 MB</strong></li>
-            <li>Disarankan resolusi tinggi agar tidak pecah di HP.</li>
-          </ul>
         </div>
       </div>
     </div>

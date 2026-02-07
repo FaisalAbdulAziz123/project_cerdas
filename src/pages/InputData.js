@@ -7,6 +7,9 @@ export default function InputData() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // ✅ URL Backend Online Kamu
+  const BASE_URL = "https://tight-jillian-cerdas-da4a09ea.koyeb.app";
+
   const { kelompok, indikator, judul } = location.state || {};
 
   const [form, setForm] = useState({
@@ -14,6 +17,8 @@ export default function InputData() {
     judulNarasi: "",
     isiNarasi: "",
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // CHANGE TEXT INPUT
   const handleChange = (e) => {
@@ -30,51 +35,38 @@ export default function InputData() {
     if (file) reader.readAsDataURL(file);
   };
 
-  // ========================================================
-  // FIX: DETEKSI INFOGRAFIS
-  // Tidak punya indikator & judul = hanya gambar
-  // ========================================================
   const isGambarOnly =
     kelompok !== "SEKILAS KOTA SUKABUMI" &&
     ((!indikator || indikator === "-" || indikator === "") &&
     (!judul || judul === "-" || judul === ""));
 
-  console.log("DEBUG STATE:", { kelompok, indikator, judul, isGambarOnly });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     let endpoint = "";
     let payload = {};
 
-    // =================================================
-    // 1. INFOGRAFIS (Hanya upload gambar)
-    // =================================================
+    // 1. INFOGRAFIS
     if (isGambarOnly) {
-      endpoint = "http://localhost:5000/infografis";
+      endpoint = `${BASE_URL}/infografis`;
       payload = {
         kelompok,
         gambar: form.gambar,
       };
     }
-
-    // =================================================
     // 2. SEKILAS KOTA SUKABUMI
-    // =================================================
     else if (kelompok === "SEKILAS KOTA SUKABUMI") {
-      endpoint = "http://localhost:5000/api/sekilas";
+      endpoint = `${BASE_URL}/api/sekilas`;
       payload = {
         judulNarasi: form.judulNarasi,
         isiNarasi: form.isiNarasi,
         gambar: form.gambar,
       };
     }
-
-    // =================================================
     // 3. DATA MAKRO (data_input)
-    // =================================================
     else {
-      endpoint = "http://localhost:5000/api/input-data";
+      endpoint = `${BASE_URL}/api/input-data`;
       payload = {
         kelompok,
         indikator,
@@ -85,9 +77,6 @@ export default function InputData() {
       };
     }
 
-    console.log("KIRIM KE:", endpoint);
-    console.log("PAYLOAD:", payload);
-
     try {
       const res = await fetch(endpoint, {
         method: "POST",
@@ -96,14 +85,17 @@ export default function InputData() {
       });
 
       if (res.ok) {
-        alert("✅ Data berhasil disimpan!");
+        alert("✅ Data berhasil disimpan ke server online!");
         navigate("/kelola-data");
       } else {
-        alert("❌ Gagal mengirim ke server.");
+        const errorData = await res.json();
+        alert(`❌ Gagal: ${errorData.message || "Terjadi kesalahan server."}`);
       }
     } catch (err) {
       console.error(err);
-      alert("⚠️ Error koneksi!");
+      alert("⚠️ Error koneksi! Pastikan backend Koyeb Anda sedang aktif.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -111,12 +103,10 @@ export default function InputData() {
     <div className="kelola-container">
       <div className="header-row1">
         <h2 className="title">INPUT DATA</h2>
-       
       </div>
 
-      {/* Breadcrumb */}
       <div className="breadcrumb">
-        <button className="btn-breadcrumb">{kelompok}</button>
+        <button className="btn-breadcrumb">{kelompok || "Tanpa Kelompok"}</button>
 
         {!isGambarOnly && kelompok !== "SEKILAS KOTA SUKABUMI" && (
           <>
@@ -130,12 +120,8 @@ export default function InputData() {
         </button>
       </div>
 
-      {/* FORM */}
       <form className="input-form" onSubmit={handleSubmit}>
         
-        {/* ----------------------- */}
-        {/* INFOGRAFIS: Gambar saja */}
-        {/* ----------------------- */}
         {isGambarOnly && (
           <div className="form-group">
             <label>Upload Infografis</label>
@@ -143,9 +129,6 @@ export default function InputData() {
           </div>
         )}
 
-        {/* ----------------------- */}
-        {/* SEKILAS */}
-        {/* ----------------------- */}
         {kelompok === "SEKILAS KOTA SUKABUMI" && !isGambarOnly && (
           <>
             <div className="form-group">
@@ -158,7 +141,6 @@ export default function InputData() {
                 required
               />
             </div>
-
             <div className="form-group">
               <label>Isi Narasi</label>
               <textarea
@@ -168,7 +150,6 @@ export default function InputData() {
                 required
               ></textarea>
             </div>
-
             <div className="form-group">
               <label>Upload Gambar (Opsional)</label>
               <input type="file" accept="image/*" onChange={handleFile} />
@@ -176,16 +157,12 @@ export default function InputData() {
           </>
         )}
 
-        {/* ----------------------- */}
-        {/* DATA MAKRO */}
-        {/* ----------------------- */}
         {!isGambarOnly && kelompok !== "SEKILAS KOTA SUKABUMI" && (
           <>
             <div className="form-group">
               <label>Gambar</label>
               <input type="file" accept="image/*" onChange={handleFile} />
             </div>
-
             <div className="form-group">
               <label>Judul Narasi</label>
               <input
@@ -196,7 +173,6 @@ export default function InputData() {
                 required
               />
             </div>
-
             <div className="form-group">
               <label>Isi Narasi</label>
               <textarea
@@ -209,8 +185,8 @@ export default function InputData() {
           </>
         )}
 
-        <button type="submit" className="btn-simpan">
-          Simpan
+        <button type="submit" className="btn-simpan" disabled={isSubmitting}>
+          {isSubmitting ? "Menyimpan..." : "Simpan ke Server"}
         </button>
       </form>
     </div>

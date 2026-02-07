@@ -1,11 +1,15 @@
-  import React, { useEffect, useState } from "react";
-  import axios from "axios";
-  import { FaUser, FaChevronDown, FaHistory, FaPlusCircle, FaTrash, FaEdit } from "react-icons/fa";
-  import smartStats from "../assets/logo.png";
-  import "../styles/Dashboard.css";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { FaUser, FaChevronDown, FaHistory, FaPlusCircle, FaTrash, FaEdit } from "react-icons/fa";
+import smartStats from "../assets/logo.png";
+import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ✅ URL Backend Online kamu
+  const API_URL = "https://tight-jillian-cerdas-da4a09ea.koyeb.app/api/history";
 
   useEffect(() => {
     fetchHistory();
@@ -13,10 +17,14 @@ export default function Dashboard() {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/history");
+      setLoading(true);
+      // ✅ Menggunakan URL Online
+      const res = await axios.get(API_URL);
       setLogs(res.data);
     } catch (error) {
       console.error("Gagal mengambil history:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,11 +46,6 @@ export default function Dashboard() {
       {/* Header */}
       <div className="dashboard-header">
         <h2 className="dashboard-title">DASHBOARD</h2>
-        {/* <div className="admin-box">
-          <FaUser className="admin-icon" />
-          <span className="admin-text">Admin</span>
-          <FaChevronDown className="admin-dropdown" />
-        </div> */}
       </div>
 
       <div className="dashboard-main">
@@ -64,7 +67,11 @@ export default function Dashboard() {
             <h3><FaHistory /> Aktivitas Terbaru</h3>
           </div>
           <div className="history-list">
-            {logs.length === 0 ? (
+            {loading ? (
+              <div className="no-data">
+                <p>Memuat data...</p>
+              </div>
+            ) : logs.length === 0 ? (
               <div className="no-data">
                 <p>Belum ada aktivitas tercatat.</p>
                 <small>Cobalah menambah atau mengedit data.</small>

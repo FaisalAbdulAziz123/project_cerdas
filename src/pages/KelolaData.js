@@ -4,7 +4,7 @@ import { FaUser, FaChevronDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-// Data Indikator Makro tetap di-hardcode karena ini adalah sub-kategori spesifik
+// Data Indikator Makro tetap di-hardcode karena ini adalah sub-kategori statis
 const indikatorDataMakro = [
   { id: "1", nama: "KEPENDUDUKAN" },
   { id: "2", nama: "KETENAGAKERJAAN" },
@@ -21,54 +21,53 @@ const indikatorDataMakro = [
 
 export default function KelolaData() {
   const [kelompok, setKelompok] = useState("");
-  const [kelompokList, setKelompokList] = useState([]); // 🎯 State baru untuk menampung data Kelompok dari API
+  const [kelompokList, setKelompokList] = useState([]); 
   const [indikator, setIndikator] = useState("");
   const [judulList, setJudulList] = useState([]);
   const [judul, setJudul] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Hapus const kelompokOptions = [...]
+  // ✅ Alamat Backend Online
+  const BASE_URL = "https://tight-jillian-cerdas-da4a09ea.koyeb.app";
 
   const indikatorOptions = {
     "INDIKATOR MAKRO": indikatorDataMakro, 
   };
 
-  // 1. 🌐 FUNGSI FETCH DATA KELOMPOK DARI BACKEND
+  // 1. 🌐 Ambil data Kelompok dari DB Online
   const fetchKelompokFromDB = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/kelompok");
-      
-      // Mapping untuk menyesuaikan nama field dari backend ke frontend
-      // Backend: nama_kelompok, Frontend: kelompok
+      const res = await axios.get(`${BASE_URL}/kelompok`);
       const formattedData = res.data.map(item => ({
         id: item.id,
-        nama: item.nama_kelompok, // Menggunakan nama_kelompok dari DB
+        nama: item.nama_kelompok,
         keterangan: item.keterangan
       }));
-      
       setKelompokList(formattedData);
     } catch (err) {
       console.error("Gagal ambil data kelompok:", err);
-      setKelompokList([]);
+      alert("⚠️ Gagal mengambil data kelompok dari server online.");
     }
   };
 
-  // 🔄 useEffect untuk memanggil data Kelompok saat komponen dimuat
   useEffect(() => {
     fetchKelompokFromDB();
-  }, []); // Hanya dijalankan sekali
+  }, []);
 
-  // 2. 🔹 Ambil data tema sesuai Indikator ID (Logika lama tetap)
+  // 2. 🔹 Ambil data tema sesuai Indikator yang dipilih
   useEffect(() => {
     const fetchJudulFromDB = async () => {
       if (indikator) {
         try {
-          // Memanggil endpoint tema dengan ID indikator
-          const res = await axios.get(`http://localhost:5000/tema/${indikator}`);
+          setIsLoading(true);
+          const res = await axios.get(`${BASE_URL}/tema/${indikator}`);
           setJudulList(res.data);
         } catch (err) {
           console.error("Gagal ambil data tema:", err);
           setJudulList([]);
+        } finally {
+          setIsLoading(false);
         }
       } else {
         setJudulList([]);
@@ -77,9 +76,7 @@ export default function KelolaData() {
     fetchJudulFromDB();
   }, [indikator]);
 
-  // 🔹 Navigasi ke halaman input
   const handleInput = () => {
-    // Cari kelompok yang saat ini dipilih
     const selectedGroup = kelompokList.find(item => item.nama === kelompok);
 
     if (!selectedGroup) {
@@ -87,7 +84,7 @@ export default function KelolaData() {
         return;
     }
 
-    // Untuk kelompok non-indikator makro, Indikator dan Judul diisi '-'
+    // Untuk kelompok selain indikator makro (misal: SEKILAS KOTA)
     if (selectedGroup.nama !== "INDIKATOR MAKRO") {
       navigate("/input-data", {
         state: { kelompok: selectedGroup.nama, indikator: "-", judul: "-" },
@@ -95,13 +92,20 @@ export default function KelolaData() {
       return;
     }
 
-    // Untuk Indikator Makro, pastikan semua field terisi
+    // Untuk Indikator Makro, pastikan semua field (Kelompok, Indikator, Judul) sudah dipilih
     if (kelompok && indikator && judul) {
+      // Cari nama indikator berdasarkan ID untuk dikirim ke state
+      const findIndikatorNama = indikatorDataMakro.find(i => i.id === indikator);
+      
       navigate("/input-data", {
-        state: { kelompok, indikator, judul },
+        state: { 
+            kelompok, 
+            indikator: findIndikatorNama ? findIndikatorNama.nama : indikator, 
+            judul 
+        },
       });
     } else {
-      alert("⚠️ Silakan pilih semua field terlebih dahulu!");
+      alert("⚠️ Silakan pilih Indikator dan Judul Konten terlebih dahulu!");
     }
   };
 
@@ -114,7 +118,7 @@ export default function KelolaData() {
       <div className="kelola-form">
         {/* Kelompok */}
         <div className="form-group">
-          <label>Kelompok</label>
+          <label>Kelompok Data</label>
           <select
             value={kelompok}
             onChange={(e) => {
@@ -125,7 +129,6 @@ export default function KelolaData() {
             }}
           >
             <option value="">-- Pilih Kelompok --</option>
-            {/* 3. MAPPING: Menggunakan data dari state kelompokList */}
             {kelompokList.map((item) => (
               <option key={item.id} value={item.nama}>
                 {item.nama}
@@ -134,20 +137,19 @@ export default function KelolaData() {
           </select>
         </div>
 
-        {/* Indikator */}
+        {/* Form tambahan muncul hanya jika memilih INDIKATOR MAKRO */}
         {kelompok === "INDIKATOR MAKRO" && (
           <>
             <div className="form-group">
-              <label>Indikator</label>
+              <label>Pilih Indikator</label>
               <select
                 value={indikator}
                 onChange={(e) => {
-                  setIndikator(e.target.value); // Menyimpan ID ("1", "2", dst.)
+                  setIndikator(e.target.value);
                   setJudul("");
                 }}
               >
                 <option value="">-- Pilih Indikator --</option>
-                {/* Menggunakan data Indikator Makro yang di-hardcode */}
                 {indikatorOptions["INDIKATOR MAKRO"].map((item) => (
                   <option key={item.id} value={item.id}> 
                     {item.nama} 
@@ -157,10 +159,11 @@ export default function KelolaData() {
             </div>
 
             <div className="form-group">
-              <label>Judul Konten</label>
+              <label>Pilih Judul Konten {isLoading && "(Memuat...)"}</label>
               <select
                 value={judul}
                 onChange={(e) => setJudul(e.target.value)}
+                disabled={isLoading}
               >
                 <option value="">-- Pilih Judul Konten --</option>
                 {judulList.map((item) => (
@@ -174,7 +177,7 @@ export default function KelolaData() {
         )}
 
         <button className="btn-input" onClick={handleInput}>
-          Input Data
+          Proses Input Data
         </button>
       </div>
     </div>

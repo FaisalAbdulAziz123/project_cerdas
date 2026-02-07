@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 // 1. Import Layout yang sudah kita buat
-import Layout from "./components/Layout"; 
+import Layout from "./components/Layout";
+import ProtectedRoute from "./components/ProtectedRoute"; 
 
 // Import semua halaman Anda
 import Login from "./pages/Login";
@@ -34,9 +35,9 @@ function App() {
         {/* Ditempatkan di luar karena tampilannya berbeda */}
         <Route path="/" element={<Login />} />
 
-        {/* RUTE 2: Semua Halaman Lain (Dengan Sidebar/Layout) */}
-        {/* Layout menjadi 'pembungkus' untuk semua rute di dalamnya */}
-        <Route element={<Layout />}>
+        {/* RUTE 2: Semua Halaman Lain (Dengan Sidebar/Layout) - DILINDUNGI */}
+        {/* Semua route di dalam Layout harus login dulu */}
+        <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
           <Route path="dashboard" element={<Dashboard />} />
           {/* <Route path="kelola-pengguna" element={<KelolaPengguna />} /> */}
           <Route path="cover-halaman-utama" element={<CoverHalamanUtama />} />
@@ -58,8 +59,8 @@ function App() {
           <Route path="/sekilas-sukabumi-view" element={<SekilasSukabumiView />} />
         </Route>
 
-        {/* Rute untuk halaman yang tidak ditemukan (opsional) */}
-        <Route path="*" element={<h1>404: Halaman Tidak ADA</h1>} />
+        {/* Rute untuk halaman yang tidak ditemukan - redirect ke login */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

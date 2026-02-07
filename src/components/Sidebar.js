@@ -8,16 +8,25 @@ import {
   FaChevronDown,
   FaChevronUp,
   FaFolderOpen,
+  FaSignOutAlt,
 } from "react-icons/fa";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/kaca 1.png";
 import logoFooter from "../assets/logo.png";
 import "../styles/Sidebar.css";
 
 export default function Sidebar({ isOpen }) {
   const [openKerangka, setOpenKerangka] = useState(false);
+  const navigate = useNavigate();
 
   const toggleKerangka = () => setOpenKerangka((prev) => !prev);
+
+  const handleLogout = () => {
+    // Hapus data user dari localStorage
+    localStorage.removeItem("user");
+    // Redirect ke halaman login
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className={`sidebar ${isOpen ? "open" : "closed"}`}>
@@ -135,6 +144,18 @@ export default function Sidebar({ isOpen }) {
               <FaDatabase className="icon" />
               <span>Kelola Data</span>
             </NavLink>
+          </li>
+
+          {/* Tombol Logout */}
+          <li>
+            <button
+              type="button"
+              className="logout-btn"
+              onClick={handleLogout}
+            >
+              <FaSignOutAlt className="icon" />
+              <span>Logout</span>
+            </button>
           </li>
         </ul>
 

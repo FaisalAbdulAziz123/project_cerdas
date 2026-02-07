@@ -5,11 +5,14 @@ import "../../styles/Tema.css";
 
 function Tema() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // id_indikator
   const [dataTema, setDataTema] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ id: "", judul: "", keterangan: "" });
   const [editMode, setEditMode] = useState(false);
+
+  // ✅ Definisikan Base URL agar rapi
+  const API_BASE = "https://tight-jillian-cerdas-da4a09ea.koyeb.app/tema";
 
   const indikatorList = {
     1: "Kependudukan",
@@ -27,33 +30,30 @@ function Tema() {
 
   const indikator = indikatorList[id];
 
-  // 🔹 Ambil data dari backend
   useEffect(() => {
     fetchTema();
   }, [id]);
 
   const fetchTema = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/tema/${id}`);
+      // ✅ Mengambil tema berdasarkan ID Indikator
+      const res = await axios.get(`${API_BASE}/${id}`);
       setDataTema(res.data);
     } catch (error) {
       console.error("Gagal mengambil data:", error);
     }
   };
 
-  // 🔹 Klik judul → ke halaman tabel
-const handleRowClick = (row) => {
-  navigate(`/kerangka/tabel/${row.id}`, {
-    state: { 
-      id_tema: row.id,   // penting!!
-      judul: row.judul, 
-      indikator 
-    },
-  });
-};
+  const handleRowClick = (row) => {
+    navigate(`/kerangka/tabel/${row.id}`, {
+      state: { 
+        id_tema: row.id,
+        judul: row.judul, 
+        indikator 
+      },
+    });
+  };
 
-
-  // 🔹 Tambah & Edit Data
   const handleAddClick = () => {
     setFormData({ id: "", judul: "", keterangan: "" });
     setEditMode(false);
@@ -67,11 +67,16 @@ const handleRowClick = (row) => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id, e) => {
+  const handleDelete = async (temaId, e) => {
     e.stopPropagation();
     if (window.confirm("Yakin ingin menghapus data ini?")) {
-      await axios.delete(`http://localhost:5000/tema/${id}`);
-      fetchTema();
+      try {
+        // ✅ Perbaikan: Menggunakan temaId yang spesifik untuk dihapus
+        await axios.delete(`${API_BASE}/${temaId}`);
+        fetchTema();
+      } catch (error) {
+        console.error("Gagal menghapus:", error);
+      }
     }
   };
 
@@ -79,9 +84,11 @@ const handleRowClick = (row) => {
     e.preventDefault();
     try {
       if (editMode) {
-        await axios.put(`http://localhost:5000/tema/${formData.id}`, formData);
+        // ✅ Update data tema yang sudah ada
+        await axios.put(`${API_BASE}/${formData.id}`, formData);
       } else {
-        await axios.post("http://localhost:5000/tema", {
+        // ✅ Perbaikan: Penulisan URL menggunakan backtick (``)
+        await axios.post(`${API_BASE}/${id}`, {
           id_indikator: id,
           judul: formData.judul,
           keterangan: formData.keterangan,
@@ -91,6 +98,7 @@ const handleRowClick = (row) => {
       fetchTema();
     } catch (error) {
       console.error("Gagal menyimpan data:", error);
+      alert("Gagal menyimpan data ke server.");
     }
   };
 
@@ -108,14 +116,6 @@ const handleRowClick = (row) => {
           </h2>
         </div>
         <div className="admin-box">
-          {/* <div className="admin-info">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-              alt="Admin"
-              className="admin-avatar"
-            />
-            <span>Admin</span>
-          </div> */}
           <button className="btn-kembali" onClick={() => navigate(-1)}>
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
               <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
@@ -190,12 +190,8 @@ const handleRowClick = (row) => {
 
         {dataTema.length === 0 && (
           <div className="empty-state">
-            <svg width="80" height="80" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-              <path d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
-            </svg>
             <h3>Belum Ada Data</h3>
-            <p>Silakan tambahkan data tema baru dengan klik tombol "Tambah Data"</p>
+            <p>Silakan tambahkan data tema baru</p>
           </div>
         )}
       </div>
@@ -205,13 +201,8 @@ const handleRowClick = (row) => {
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>{editMode ? "Edit Data" : "Tambah Data"}</h3>
-              <button
-                className="modal-close"
-                onClick={() => setShowModal(false)}
-              >
-                <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
-                </svg>
+              <button className="modal-close" onClick={() => setShowModal(false)}>
+                &times;
               </button>
             </div>
             <form onSubmit={handleSubmit}>
@@ -220,10 +211,7 @@ const handleRowClick = (row) => {
                 <input
                   type="text"
                   value={formData.judul}
-                  onChange={(e) =>
-                    setFormData({ ...formData, judul: e.target.value })
-                  }
-                  placeholder="Masukkan judul tema"
+                  onChange={(e) => setFormData({ ...formData, judul: e.target.value })}
                   required
                 />
               </div>
@@ -231,27 +219,13 @@ const handleRowClick = (row) => {
                 <label>Keterangan</label>
                 <textarea
                   value={formData.keterangan}
-                  onChange={(e) =>
-                    setFormData({ ...formData, keterangan: e.target.value })
-                  }
-                  placeholder="Masukkan keterangan (opsional)"
+                  onChange={(e) => setFormData({ ...formData, keterangan: e.target.value })}
                   rows="4"
                 />
               </div>
               <div className="modal-buttons">
-                <button type="submit" className="btn-simpan">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.267.267 0 0 1 .02-.022z"/>
-                  </svg>
-                  Simpan
-                </button>
-                <button
-                  type="button"
-                  className="btn-batal"
-                  onClick={() => setShowModal(false)}
-                >
-                  Batal
-                </button>
+                <button type="submit" className="btn-simpan">Simpan</button>
+                <button type="button" className="btn-batal" onClick={() => setShowModal(false)}>Batal</button>
               </div>
             </form>
           </div>
