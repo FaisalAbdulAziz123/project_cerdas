@@ -162,7 +162,8 @@ export default function HalamanUtama() {
       </div>
       
       <div className="table-wrapper">
-        <table className="data-table">
+        <div className="table-responsive">
+          <table className="data-table">
           <thead>
             <tr>
               <th>ID</th>
@@ -195,7 +196,8 @@ export default function HalamanUtama() {
               <tr><td colSpan="4" style={{textAlign: 'center'}}>Memuat data dari server...</td></tr>
             )}
           </tbody>
-        </table>
+          </table>
+        </div>
       </div>
 
       <Modal
