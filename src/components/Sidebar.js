@@ -13,7 +13,7 @@ import logo from "../assets/kaca 1.png";
 import logoFooter from "../assets/logo.png";
 import "../styles/Sidebar.css";
 
-export default function Sidebar({ isOpen }) {
+export default function Sidebar({ isOpen, onClose }) {
   const [openKerangka, setOpenKerangka] = useState(false);
   const navigate = useNavigate();
 
@@ -24,6 +24,19 @@ export default function Sidebar({ isOpen }) {
     localStorage.removeItem("user");
     // Redirect ke halaman login
     navigate("/", { replace: true });
+    if (onClose) {
+      onClose();
+    }
+  };
+
+  const handleNavClick = () => {
+    if (!onClose) {
+      return;
+    }
+
+    if (window.innerWidth < 1024) {
+      onClose();
+    }
   };
 
   return (
@@ -36,6 +49,14 @@ export default function Sidebar({ isOpen }) {
             <h3>CERDAS</h3>
             <p>Cek Ringkasan Data Statistik</p>
           </div>
+          <button
+            type="button"
+            className="sidebar-close"
+            onClick={onClose}
+            aria-label="Tutup menu"
+          >
+            Close
+          </button>
         </div>
 
         {/* Divider */}
@@ -47,6 +68,7 @@ export default function Sidebar({ isOpen }) {
             <NavLink
               to="/dashboard"
               className={({ isActive }) => (isActive ? "active" : "")}
+              onClick={handleNavClick}
             >
               <FaHome className="icon" />
               <span>Dashboard</span>
@@ -67,6 +89,7 @@ export default function Sidebar({ isOpen }) {
             <NavLink
               to="/cover-halaman-utama"
               className={({ isActive }) => (isActive ? "active" : "")}
+              onClick={handleNavClick}
             >
               <FaFileAlt className="icon" />
               <span>Cover Halaman Utama</span>
@@ -96,6 +119,7 @@ export default function Sidebar({ isOpen }) {
                     className={({ isActive }) =>
                       isActive ? "active-sub" : ""
                     }
+                    onClick={handleNavClick}
                   >
                     Halaman Utama
                   </NavLink>
@@ -106,6 +130,7 @@ export default function Sidebar({ isOpen }) {
                     className={({ isActive }) =>
                       isActive ? "active-sub" : ""
                     }
+                    onClick={handleNavClick}
                   >
                     Data Utama
                   </NavLink>
@@ -116,6 +141,7 @@ export default function Sidebar({ isOpen }) {
                     className={({ isActive }) =>
                       isActive ? "active-sub" : ""
                     }
+                    onClick={handleNavClick}
                   >
                     Tema
                   </NavLink>
@@ -126,6 +152,7 @@ export default function Sidebar({ isOpen }) {
                     className={({ isActive }) =>
                       isActive ? "active-sub" : ""
                     }
+                    onClick={handleNavClick}
                   >
                     Tabel
                   </NavLink>
@@ -138,6 +165,7 @@ export default function Sidebar({ isOpen }) {
             <NavLink
               to="/kelola-data"
               className={({ isActive }) => (isActive ? "active" : "")}
+              onClick={handleNavClick}
             >
               <FaDatabase className="icon" />
               <span>Kelola Data</span>
