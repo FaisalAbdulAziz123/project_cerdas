@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { FaUser, FaChevronDown, FaHistory, FaPlusCircle, FaTrash, FaEdit } from "react-icons/fa";
+import { FaHistory, FaPlusCircle, FaTrash, FaEdit } from "react-icons/fa";
 import smartStats from "../assets/logo.png";
 import "../styles/Dashboard.css";
 

@@ -7,7 +7,6 @@ import ProtectedRoute from "./components/ProtectedRoute";
 // Import semua halaman Anda
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import KelolaPengguna from "./pages/KelolaPengguna";
 import CoverHalamanUtama from "./pages/CoverHalamanUtama";
 // Pastikan path import ini benar sesuai struktur folder Anda
 import Kerangka from "./pages/kerangka/Kerangka";

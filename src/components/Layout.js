@@ -2,15 +2,10 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom"; // Untuk menampilkan konten halaman
 import Sidebar from "./Sidebar";
-import { FaBars } from "react-icons/fa";
 import "../styles/Layout.css"; // CSS baru untuk layout
 
 export default function Layout() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true); // State untuk mengontrol sidebar
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
 
   return (
     <div className="app-layout">

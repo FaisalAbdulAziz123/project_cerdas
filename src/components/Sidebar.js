@@ -2,12 +2,10 @@
 import React, { useState } from "react";
 import {
   FaHome,
-  FaUsers,
   FaFileAlt,
   FaDatabase,
   FaChevronDown,
   FaChevronUp,
-  FaFolderOpen,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
