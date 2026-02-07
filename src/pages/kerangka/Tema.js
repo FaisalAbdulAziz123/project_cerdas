@@ -30,10 +30,6 @@ function Tema() {
 
   const indikator = indikatorList[id];
 
-  useEffect(() => {
-    fetchTema();
-  }, [id]);
-
   const fetchTema = async () => {
     try {
       // ✅ Mengambil tema berdasarkan ID Indikator
@@ -43,6 +39,11 @@ function Tema() {
       console.error("Gagal mengambil data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchTema();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleRowClick = (row) => {
     navigate(`/kerangka/tabel/${row.id}`, {

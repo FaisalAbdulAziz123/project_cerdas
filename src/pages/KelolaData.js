@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "../styles/KelolaData.css";
-import { FaUser, FaChevronDown } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 

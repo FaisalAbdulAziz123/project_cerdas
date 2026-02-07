@@ -17,10 +17,6 @@ export default function InfografisView() {
   // ✅ URL Backend Online Kamu
   const BASE_URL = "https://tight-jillian-cerdas-da4a09ea.koyeb.app";
 
-  useEffect(() => {
-    fetchInfografis();
-  }, [kelompokAktif]);
-
   const fetchInfografis = async () => {
     try {
       setIsLoading(true);
@@ -38,6 +34,11 @@ export default function InfografisView() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchInfografis();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [kelompokAktif]);
 
   const closeModal = () => {
     setSelectedImage(null);

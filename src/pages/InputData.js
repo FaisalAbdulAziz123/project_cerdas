@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { FaUser, FaChevronDown } from "react-icons/fa";
 import "../styles/InputData.css";
 
 export default function InputData() {
